@@ -1,0 +1,56 @@
+@model MovieFormViewModel
+@{
+    ViewData["Title"] = "Edit Movie";
+    Layout = "_Layout";
+}
+
+<h2>Edit Movie</h2>
+
+<div class="row">
+    <div class="col-md-6">
+        <form asp-action="Edit" method="post" enctype="multipart/form-data">
+            <input type="hidden" asp-for="Id" />
+            <input type="hidden" asp-for="ExistingPosterPath" />
+
+            @if (!string.IsNullOrEmpty(Model.ExistingPosterPath))
+            {
+                <div class="mb-3">
+                    <label class="form-label">Current Poster</label><br />
+                    <img src="@Model.ExistingPosterPath" style="height:120px;" />
+                </div>
+            }
+
+            <div class="mb-3">
+                <label asp-for="Title" class="form-label"></label>
+                <input asp-for="Title" class="form-control" />
+                <span asp-validation-for="Title" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="Description" class="form-label"></label>
+                <textarea asp-for="Description" class="form-control" rows="3"></textarea>
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="Genre" class="form-label"></label>
+                <input asp-for="Genre" class="form-control" />
+                <span asp-validation-for="Genre" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="DurationMinutes" class="form-label"></label>
+                <input asp-for="DurationMinutes" class="form-control" type="number" />
+                <span asp-validation-for="DurationMinutes" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="ReleaseDate" class="form-label"></label>
+                <input asp-for="ReleaseDate" class="form-control" type="date" />
+                <span asp-validation-for="ReleaseDate" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="Poster" class="form-label">New Poster (optional)</label>
+                <input asp-for="Poster" class="form-control" type="file" accept="image/*" />
+            </div>
+            <button type="submit" class="btn btn-warning">Save Changes</button>
+            <a asp-action="Index" class="btn btn-secondary ms-2">Cancel</a>
+        </form>
+    </div>
+</div>

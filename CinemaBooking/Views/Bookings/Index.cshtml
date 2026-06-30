@@ -1,0 +1,62 @@
+@model List<Booking>
+@{
+    ViewData["Title"] = "My Bookings";
+}
+
+<h2 class="mb-4"><i class="bi bi-ticket-perforated"></i> My Bookings</h2>
+
+@if (!Model.Any())
+{
+    <div class="alert alert-info">You have no bookings yet. <a asp-controller="Movies" asp-action="Index" class="alert-link">Browse movies</a></div>
+}
+else
+{
+    <div class="table-responsive">
+        <table class="table table-dark table-hover">
+            <thead>
+                <tr>
+                    <th>Movie</th>
+                    <th>Cinema</th>
+                    <th>Hall</th>
+                    <th>Date & Time</th>
+                    <th>Seats</th>
+                    <th>Total</th>
+                    <th>Status</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var booking in Model)
+                {
+                    <tr>
+                        <td>@booking.Showtime.Movie.Title</td>
+                        <td>@booking.Showtime.Hall.Cinema.Name</td>
+                        <td>@booking.Showtime.Hall.Name</td>
+                        <td>@booking.Showtime.StartTime.ToString("ddd, dd MMM yyyy HH:mm")</td>
+                        <td>@booking.NumberOfSeats</td>
+                        <td>$@booking.TotalPrice</td>
+                        <td>
+                            @if (booking.Showtime.HasStarted)
+                            {
+                                <span class="badge bg-secondary">Completed</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-success">Upcoming</span>
+                            }
+                        </td>
+                        <td>
+                            @if (!booking.Showtime.HasStarted)
+                            {
+                                <form asp-action="Cancel" asp-route-id="@booking.Id" method="post"
+                                      onsubmit="return confirm('Are you sure you want to cancel this booking?')">
+                                    <button type="submit" class="btn btn-outline-danger btn-sm">Cancel</button>
+                                </form>
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}

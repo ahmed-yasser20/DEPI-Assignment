@@ -1,0 +1,27 @@
+@model List<Cinema>
+@{
+    ViewData["Title"] = "Cinemas";
+}
+
+<h2 class="mb-4"><i class="bi bi-building"></i> Our Cinemas</h2>
+
+<div class="row g-4">
+    @foreach (var cinema in Model)
+    {
+        <div class="col-md-4">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h5 class="card-title"><i class="bi bi-geo-alt text-danger"></i> @cinema.Name</h5>
+                    <p class="text-muted">@cinema.Location</p>
+                    <p class="small">@cinema.Halls.Count hall(s)</p>
+                    <ul class="list-unstyled">
+                        @foreach (var hall in cinema.Halls)
+                        {
+                            <li><i class="bi bi-door-open text-muted"></i> @hall.Name — @hall.Capacity seats</li>
+                        }
+                    </ul>
+                </div>
+            </div>
+        </div>
+    }
+</div>

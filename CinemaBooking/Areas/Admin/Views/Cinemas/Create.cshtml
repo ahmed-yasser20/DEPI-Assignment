@@ -1,0 +1,23 @@
+@model CinemaFormViewModel
+@{
+    ViewData["Title"] = "Add Cinema";
+    Layout = "_Layout";
+}
+
+<h2>Add Cinema</h2>
+<div class="col-md-5">
+    <form asp-action="Create" method="post">
+        <div class="mb-3">
+            <label asp-for="Name" class="form-label"></label>
+            <input asp-for="Name" class="form-control" />
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </div>
+        <div class="mb-3">
+            <label asp-for="Location" class="form-label"></label>
+            <input asp-for="Location" class="form-control" />
+            <span asp-validation-for="Location" class="text-danger"></span>
+        </div>
+        <button type="submit" class="btn btn-success">Add Cinema</button>
+        <a asp-action="Index" class="btn btn-secondary ms-2">Cancel</a>
+    </form>
+</div>

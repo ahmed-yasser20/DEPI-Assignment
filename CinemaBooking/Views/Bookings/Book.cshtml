@@ -1,0 +1,55 @@
+@model BookingViewModel
+@{
+    ViewData["Title"] = "Book Tickets";
+    var showtime = (Showtime)ViewBag.Showtime;
+}
+
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h4><i class="bi bi-ticket-perforated"></i> Book Tickets</h4>
+            </div>
+            <div class="card-body">
+                <table class="table table-dark table-sm mb-4">
+                    <tr><th>Movie</th><td>@showtime.Movie.Title</td></tr>
+                    <tr><th>Cinema</th><td>@showtime.Hall.Cinema.Name</td></tr>
+                    <tr><th>Hall</th><td>@showtime.Hall.Name</td></tr>
+                    <tr><th>Date & Time</th><td>@showtime.StartTime.ToString("ddd, dd MMM yyyy HH:mm")</td></tr>
+                    <tr><th>Price per Seat</th><td>$@showtime.TicketPrice</td></tr>
+                    <tr><th>Available Seats</th><td>@showtime.AvailableSeats</td></tr>
+                </table>
+
+                <form asp-action="Book" method="post">
+                    <input type="hidden" asp-for="ShowtimeId" />
+                    <div class="mb-3">
+                        <label asp-for="NumberOfSeats" class="form-label">Number of Seats</label>
+                        <input asp-for="NumberOfSeats" type="number" min="1" max="@showtime.AvailableSeats"
+                               class="form-control bg-dark text-white border-secondary" id="seatsInput" />
+                        <span asp-validation-for="NumberOfSeats" class="text-danger"></span>
+                    </div>
+
+                    <div class="alert alert-info" id="pricePreview">
+                        Total: <strong id="totalPrice">$@showtime.TicketPrice</strong>
+                    </div>
+
+                    <button type="submit" class="btn btn-danger w-100">
+                        <i class="bi bi-check-circle"></i> Confirm Booking
+                    </button>
+                    <a asp-controller="Movies" asp-action="Details" asp-route-id="@showtime.MovieId"
+                       class="btn btn-secondary w-100 mt-2">Cancel</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        var pricePerSeat = @showtime.TicketPrice;
+        document.getElementById('seatsInput').addEventListener('input', function () {
+            var seats = parseInt(this.value) || 0;
+            document.getElementById('totalPrice').textContent = '$' + (seats * pricePerSeat).toFixed(2);
+        });
+    </script>
+}

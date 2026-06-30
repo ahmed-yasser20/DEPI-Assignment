@@ -1,0 +1,90 @@
+@model Movie
+@{
+    ViewData["Title"] = Model.Title;
+}
+
+<div class="row mb-4">
+    <div class="col-md-3">
+        @if (!string.IsNullOrEmpty(Model.PosterPath))
+        {
+            <img src="@Model.PosterPath" class="img-fluid rounded" alt="@Model.Title" />
+        }
+        else
+        {
+            <div class="d-flex align-items-center justify-content-center bg-secondary rounded" style="height:350px;">
+                <i class="bi bi-film" style="font-size:5rem;color:#ccc;"></i>
+            </div>
+        }
+    </div>
+    <div class="col-md-9">
+        <h2>@Model.Title</h2>
+        <p class="text-muted">@Model.Genre &bull; @Model.DurationMinutes minutes &bull; Released: @Model.ReleaseDate.ToString("MMM yyyy")</p>
+        <p>@Model.Description</p>
+    </div>
+</div>
+
+<h4 class="mb-3">Available Showtimes</h4>
+
+@if (!Model.Showtimes.Any())
+{
+    <div class="alert alert-info">No showtimes available for this movie.</div>
+}
+else
+{
+    <div class="table-responsive">
+        <table class="table table-dark table-hover">
+            <thead>
+                <tr>
+                    <th>Date & Time</th>
+                    <th>Cinema</th>
+                    <th>Hall</th>
+                    <th>Price</th>
+                    <th>Available Seats</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var showtime in Model.Showtimes.OrderBy(s => s.StartTime))
+                {
+                    <tr>
+                        <td>@showtime.StartTime.ToString("ddd, dd MMM yyyy HH:mm")</td>
+                        <td>@showtime.Hall.Cinema.Name</td>
+                        <td>@showtime.Hall.Name</td>
+                        <td>$@showtime.TicketPrice</td>
+                        <td>
+                            @if (showtime.AvailableSeats > 0)
+                            {
+                                <span class="badge bg-success">@showtime.AvailableSeats seats left</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-danger">Full</span>
+                            }
+                        </td>
+                        <td>
+                            @if (!showtime.HasStarted && showtime.AvailableSeats > 0)
+                            {
+                                @if (User.Identity!.IsAuthenticated)
+                                {
+                                    <a asp-controller="Bookings" asp-action="Book" asp-route-showtimeId="@showtime.Id" class="btn btn-danger btn-sm">Book Now</a>
+                                }
+                                else
+                                {
+                                    <a asp-controller="Account" asp-action="Login" class="btn btn-outline-danger btn-sm">Login to Book</a>
+                                }
+                            }
+                            else if (showtime.HasStarted)
+                            {
+                                <span class="text-muted small">Started</span>
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
+
+<a asp-action="Index" class="btn btn-secondary mt-3">
+    <i class="bi bi-arrow-left"></i> Back to Movies
+</a>

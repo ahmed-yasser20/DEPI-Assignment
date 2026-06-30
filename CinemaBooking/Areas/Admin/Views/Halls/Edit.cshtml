@@ -1,0 +1,31 @@
+@model HallFormViewModel
+@{
+    ViewData["Title"] = "Edit Hall";
+    Layout = "_Layout";
+}
+
+<h2>Edit Hall</h2>
+<div class="col-md-5">
+    <form asp-action="Edit" method="post">
+        <input type="hidden" asp-for="Id" />
+        <div class="mb-3">
+            <label asp-for="Name" class="form-label"></label>
+            <input asp-for="Name" class="form-control" />
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </div>
+        <div class="mb-3">
+            <label asp-for="Capacity" class="form-label"></label>
+            <input asp-for="Capacity" class="form-control" type="number" />
+            <span asp-validation-for="Capacity" class="text-danger"></span>
+        </div>
+        <div class="mb-3">
+            <label asp-for="CinemaId" class="form-label">Cinema</label>
+            <select asp-for="CinemaId" asp-items="ViewBag.Cinemas" class="form-select">
+                <option value="">-- Select Cinema --</option>
+            </select>
+            <span asp-validation-for="CinemaId" class="text-danger"></span>
+        </div>
+        <button type="submit" class="btn btn-warning">Save Changes</button>
+        <a asp-action="Index" class="btn btn-secondary ms-2">Cancel</a>
+    </form>
+</div>

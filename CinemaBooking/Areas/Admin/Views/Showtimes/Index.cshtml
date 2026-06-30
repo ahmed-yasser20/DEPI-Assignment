@@ -1,0 +1,44 @@
+@model List<Showtime>
+@{
+    ViewData["Title"] = "Manage Showtimes";
+    Layout = "_Layout";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>Showtimes</h2>
+    <a asp-action="Create" class="btn btn-success"><i class="bi bi-plus-circle"></i> Add Showtime</a>
+</div>
+
+<table class="table table-striped table-hover">
+    <thead class="table-dark">
+        <tr>
+            <th>Movie</th>
+            <th>Cinema</th>
+            <th>Hall</th>
+            <th>Date & Time</th>
+            <th>Price</th>
+            <th>Bookings</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var s in Model)
+        {
+            <tr>
+                <td>@s.Movie.Title</td>
+                <td>@s.Hall.Cinema.Name</td>
+                <td>@s.Hall.Name</td>
+                <td>@s.StartTime.ToString("dd MMM yyyy HH:mm")</td>
+                <td>$@s.TicketPrice</td>
+                <td>@s.Bookings.Sum(b => b.NumberOfSeats) / @s.Hall.Capacity</td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@s.Id" class="btn btn-sm btn-warning">Edit</a>
+                    <form asp-action="Delete" asp-route-id="@s.Id" method="post" class="d-inline"
+                          onsubmit="return confirm('Delete this showtime?')">
+                        <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
